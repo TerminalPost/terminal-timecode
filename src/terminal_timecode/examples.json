@@ -1,0 +1,387 @@
+{
+ "about": [
+  "Timecode examples every implementation must pass (frames both ways, typed digits, refused timecodes). The master copy is this file, in the terminal-timecode package; Argento (core/display/timecode_examples.json, for its screens) and TerminalPlayer (tests/timecode_examples.json, for its mpv script) keep copies, and their tests fail if a copy differs.",
+  "frames: a frame count from 00:00:00:00 and its timecode, both ways. fps is the real rate (23.976 counts as 24, 29.97 as 30). Drop-frame applies to 29.97 and 59.94 only; ';' before the frames. Values cross-checked against an independent implementation and known points (29.97 drop-frame: 17982 = 00:10:00;00, 107892 = 01:00:00;00).",
+  "typed: eight typed digits and the timecode that exists at that rate (clamped; for drop-frame, a skipped number moves up to the first one that exists).",
+  "refused: timecodes that don't exist at that rate, which a conversion must refuse rather than turn into a frame number: a number drop-frame skips, frames, seconds or minutes too high, 24 hours or more, a separator that doesn't match the drop-frame setting (';' means drop-frame), anything but two digits per field. Lenient forms people type or paste (1:0:0:0, 01000000) are the typing field's job, before conversion."
+ ],
+ "frames": [
+  {
+   "fps": 24,
+   "drop_frame": false,
+   "frames": 0,
+   "timecode": "00:00:00:00"
+  },
+  {
+   "fps": 24,
+   "drop_frame": false,
+   "frames": 1,
+   "timecode": "00:00:00:01"
+  },
+  {
+   "fps": 24,
+   "drop_frame": false,
+   "frames": 23,
+   "timecode": "00:00:00:23"
+  },
+  {
+   "fps": 24,
+   "drop_frame": false,
+   "frames": 24,
+   "timecode": "00:00:01:00"
+  },
+  {
+   "fps": 24,
+   "drop_frame": false,
+   "frames": 1469,
+   "timecode": "00:01:01:05"
+  },
+  {
+   "fps": 24,
+   "drop_frame": false,
+   "frames": 86400,
+   "timecode": "01:00:00:00"
+  },
+  {
+   "fps": 24,
+   "drop_frame": false,
+   "frames": 172799,
+   "timecode": "01:59:59:23"
+  },
+  {
+   "fps": 23.976,
+   "drop_frame": false,
+   "frames": 86400,
+   "timecode": "01:00:00:00"
+  },
+  {
+   "fps": 23.976,
+   "drop_frame": false,
+   "frames": 86401,
+   "timecode": "01:00:00:01"
+  },
+  {
+   "fps": 23.976,
+   "drop_frame": false,
+   "frames": 172799,
+   "timecode": "01:59:59:23"
+  },
+  {
+   "fps": 25,
+   "drop_frame": false,
+   "frames": 0,
+   "timecode": "00:00:00:00"
+  },
+  {
+   "fps": 25,
+   "drop_frame": false,
+   "frames": 24,
+   "timecode": "00:00:00:24"
+  },
+  {
+   "fps": 25,
+   "drop_frame": false,
+   "frames": 25,
+   "timecode": "00:00:01:00"
+  },
+  {
+   "fps": 25,
+   "drop_frame": false,
+   "frames": 90000,
+   "timecode": "01:00:00:00"
+  },
+  {
+   "fps": 25,
+   "drop_frame": false,
+   "frames": 899999,
+   "timecode": "09:59:59:24"
+  },
+  {
+   "fps": 29.97,
+   "drop_frame": false,
+   "frames": 1800,
+   "timecode": "00:01:00:00"
+  },
+  {
+   "fps": 29.97,
+   "drop_frame": false,
+   "frames": 107892,
+   "timecode": "00:59:56:12"
+  },
+  {
+   "fps": 29.97,
+   "drop_frame": false,
+   "frames": 108000,
+   "timecode": "01:00:00:00"
+  },
+  {
+   "fps": 30,
+   "drop_frame": false,
+   "frames": 108000,
+   "timecode": "01:00:00:00"
+  },
+  {
+   "fps": 29.97,
+   "drop_frame": true,
+   "frames": 0,
+   "timecode": "00:00:00;00"
+  },
+  {
+   "fps": 29.97,
+   "drop_frame": true,
+   "frames": 1799,
+   "timecode": "00:00:59;29"
+  },
+  {
+   "fps": 29.97,
+   "drop_frame": true,
+   "frames": 1800,
+   "timecode": "00:01:00;02"
+  },
+  {
+   "fps": 29.97,
+   "drop_frame": true,
+   "frames": 1801,
+   "timecode": "00:01:00;03"
+  },
+  {
+   "fps": 29.97,
+   "drop_frame": true,
+   "frames": 3597,
+   "timecode": "00:01:59;29"
+  },
+  {
+   "fps": 29.97,
+   "drop_frame": true,
+   "frames": 3598,
+   "timecode": "00:02:00;02"
+  },
+  {
+   "fps": 29.97,
+   "drop_frame": true,
+   "frames": 17981,
+   "timecode": "00:09:59;29"
+  },
+  {
+   "fps": 29.97,
+   "drop_frame": true,
+   "frames": 17982,
+   "timecode": "00:10:00;00"
+  },
+  {
+   "fps": 29.97,
+   "drop_frame": true,
+   "frames": 17983,
+   "timecode": "00:10:00;01"
+  },
+  {
+   "fps": 29.97,
+   "drop_frame": true,
+   "frames": 107891,
+   "timecode": "00:59:59;29"
+  },
+  {
+   "fps": 29.97,
+   "drop_frame": true,
+   "frames": 107892,
+   "timecode": "01:00:00;00"
+  },
+  {
+   "fps": 29.97,
+   "drop_frame": true,
+   "frames": 108000,
+   "timecode": "01:00:03;18"
+  },
+  {
+   "fps": 59.94,
+   "drop_frame": true,
+   "frames": 3599,
+   "timecode": "00:00:59;59"
+  },
+  {
+   "fps": 59.94,
+   "drop_frame": true,
+   "frames": 3600,
+   "timecode": "00:01:00;04"
+  },
+  {
+   "fps": 59.94,
+   "drop_frame": true,
+   "frames": 35963,
+   "timecode": "00:09:59;59"
+  },
+  {
+   "fps": 59.94,
+   "drop_frame": true,
+   "frames": 35964,
+   "timecode": "00:10:00;00"
+  },
+  {
+   "fps": 59.94,
+   "drop_frame": true,
+   "frames": 215784,
+   "timecode": "01:00:00;00"
+  }
+ ],
+ "typed": [
+  {
+   "digits": "01996999",
+   "fps": 24,
+   "drop_frame": false,
+   "timecode": "01:59:59:23",
+   "note": "minutes, seconds and frames clamped"
+  },
+  {
+   "digits": "00000045",
+   "fps": 29.97,
+   "drop_frame": true,
+   "timecode": "00:00:00;29",
+   "note": "frames below 30"
+  },
+  {
+   "digits": "00010000",
+   "fps": 29.97,
+   "drop_frame": true,
+   "timecode": "00:01:00;02",
+   "note": "00 and 01 don't exist at the start of minute 1"
+  },
+  {
+   "digits": "00010001",
+   "fps": 29.97,
+   "drop_frame": true,
+   "timecode": "00:01:00;02"
+  },
+  {
+   "digits": "00100000",
+   "fps": 29.97,
+   "drop_frame": true,
+   "timecode": "00:10:00;00",
+   "note": "every tenth minute keeps them"
+  },
+  {
+   "digits": "00010100",
+   "fps": 29.97,
+   "drop_frame": true,
+   "timecode": "00:01:01;00",
+   "note": "only second 00 skips"
+  },
+  {
+   "digits": "00010002",
+   "fps": 59.94,
+   "drop_frame": true,
+   "timecode": "00:01:00;04",
+   "note": "59.94 skips 00 to 03"
+  },
+  {
+   "digits": "00010000",
+   "fps": 29.97,
+   "drop_frame": false,
+   "timecode": "00:01:00:00",
+   "note": "non-drop 29.97 keeps every number"
+  }
+ ],
+ "refused": [
+  {
+   "timecode": "00:01:00;00",
+   "fps": 29.97,
+   "drop_frame": true,
+   "why": "drop-frame skips 00 at the start of minute 1"
+  },
+  {
+   "timecode": "00:01:00;01",
+   "fps": 29.97,
+   "drop_frame": true,
+   "why": "drop-frame skips 01 at the start of minute 1"
+  },
+  {
+   "timecode": "01:59:00;01",
+   "fps": 29.97,
+   "drop_frame": true,
+   "why": "drop-frame skips 01 at the start of minute 59"
+  },
+  {
+   "timecode": "00:01:00;03",
+   "fps": 59.94,
+   "drop_frame": true,
+   "why": "59.94 drop-frame skips 00 to 03"
+  },
+  {
+   "timecode": "00:00:00:24",
+   "fps": 24,
+   "drop_frame": false,
+   "why": "frames run 00 to 23 at 24 fps"
+  },
+  {
+   "timecode": "00:00:00:24",
+   "fps": 23.976,
+   "drop_frame": false,
+   "why": "frames run 00 to 23 at 23.976"
+  },
+  {
+   "timecode": "00:00:00:25",
+   "fps": 25,
+   "drop_frame": false,
+   "why": "frames run 00 to 24 at 25 fps"
+  },
+  {
+   "timecode": "00:00:00;30",
+   "fps": 29.97,
+   "drop_frame": true,
+   "why": "frames never reach 30"
+  },
+  {
+   "timecode": "00:00:60:00",
+   "fps": 24,
+   "drop_frame": false,
+   "why": "seconds run 00 to 59"
+  },
+  {
+   "timecode": "00:60:00:00",
+   "fps": 24,
+   "drop_frame": false,
+   "why": "minutes run 00 to 59"
+  },
+  {
+   "timecode": "24:00:00:00",
+   "fps": 24,
+   "drop_frame": false,
+   "why": "timecode stops at 23:59:59:23"
+  },
+  {
+   "timecode": "01:00:00;00",
+   "fps": 24,
+   "drop_frame": false,
+   "why": "';' means drop-frame, which 24 fps doesn't have"
+  },
+  {
+   "timecode": "01:00:00;00",
+   "fps": 29.97,
+   "drop_frame": false,
+   "why": "';' means drop-frame, but this is non-drop"
+  },
+  {
+   "timecode": "01:00:00:00",
+   "fps": 29.97,
+   "drop_frame": true,
+   "why": "drop-frame is written with ';' before the frames"
+  },
+  {
+   "timecode": "1:00:00:00",
+   "fps": 24,
+   "drop_frame": false,
+   "why": "two digits per field"
+  },
+  {
+   "timecode": "01:00:00",
+   "fps": 24,
+   "drop_frame": false,
+   "why": "four fields"
+  },
+  {
+   "timecode": "",
+   "fps": 24,
+   "drop_frame": false,
+   "why": "empty"
+  }
+ ]
+}
