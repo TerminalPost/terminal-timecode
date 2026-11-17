@@ -3,7 +3,8 @@
   "Timecode examples every implementation must pass (frames both ways, typed digits, refused timecodes). The master copy is this file, in the terminal-timecode package; Argento (core/display/timecode_examples.json, for its screens) and TerminalPlayer (tests/timecode_examples.json, for its mpv script) keep copies, and their tests fail if a copy differs.",
   "frames: a frame count from 00:00:00:00 and its timecode, both ways. fps is the real rate (23.976 counts as 24, 29.97 as 30). Drop-frame applies to 29.97 and 59.94 only; ';' before the frames. Values cross-checked against an independent implementation and known points (29.97 drop-frame: 17982 = 00:10:00;00, 107892 = 01:00:00;00).",
   "typed: eight typed digits and the timecode that exists at that rate (clamped; for drop-frame, a skipped number moves up to the first one that exists).",
-  "refused: timecodes that don't exist at that rate, which a conversion must refuse rather than turn into a frame number: a number drop-frame skips, frames, seconds or minutes too high, 24 hours or more, a separator that doesn't match the drop-frame setting (';' means drop-frame), anything but two digits per field. Lenient forms people type or paste (1:0:0:0, 01000000) are the typing field's job, before conversion."
+  "refused: timecodes that don't exist at that rate, which a conversion must refuse rather than turn into a frame number: a number drop-frame skips, frames, seconds or minutes too high, 24 hours or more, a separator that doesn't match the drop-frame setting (';' means drop-frame), anything but two digits per field. Lenient forms people type or paste (1:0:0:0, 01000000) are the typing field's job, before conversion.",
+  "numbered: frame numbers counted from a chosen start (\"start\" is frame \"start_number\"): VFX's 1001 at a reel's first frame, or 0 at 00:00:00:00, the default. Both ways; a timecode before the start gets a smaller number, never below 0. Lengths (durations) are positions counted from 00:00:00:00, so they convert as \"frames\" does."
  ],
  "frames": [
   {
@@ -396,6 +397,74 @@
    "fps": 24,
    "drop_frame": false,
    "why": "empty"
+  }
+ ],
+ "numbered": [
+  {
+   "timecode": "01:00:00:00",
+   "fps": 24,
+   "drop_frame": false,
+   "start": "01:00:00:00",
+   "start_number": 1001,
+   "number": 1001
+  },
+  {
+   "timecode": "01:00:01:00",
+   "fps": 24,
+   "drop_frame": false,
+   "start": "01:00:00:00",
+   "start_number": 1001,
+   "number": 1025
+  },
+  {
+   "timecode": "00:59:59:16",
+   "fps": 24,
+   "drop_frame": false,
+   "start": "01:00:00:00",
+   "start_number": 1001,
+   "number": 993
+  },
+  {
+   "timecode": "01:00:00:00",
+   "fps": 24,
+   "drop_frame": false,
+   "start": "00:00:00:00",
+   "start_number": 0,
+   "number": 86400
+  },
+  {
+   "timecode": "10:00:00:00",
+   "fps": 25,
+   "drop_frame": false,
+   "start": "10:00:00:00",
+   "start_number": 0,
+   "number": 0
+  },
+  {
+   "timecode": "01:01:00;02",
+   "fps": 29.97,
+   "drop_frame": true,
+   "start": "01:00:00;00",
+   "start_number": 0,
+   "number": 1800
+  },
+  {
+   "timecode": "01:10:00;00",
+   "fps": 29.97,
+   "drop_frame": true,
+   "start": "01:00:00;00",
+   "start_number": 1,
+   "number": 17983
+  }
+ ],
+ "numbered_refused": [
+  {
+   "timecode": "00:00:00:00",
+   "fps": 24,
+   "drop_frame": false,
+   "start": "01:00:00:00",
+   "start_number": 1001,
+   "why": "before frame 0"
   }
  ]
 }

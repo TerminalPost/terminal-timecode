@@ -27,6 +27,21 @@ def test_impossible_timecodes_are_refused(case):
         tc.to_frames(case["timecode"], case["fps"], case["drop_frame"])
 
 
+@pytest.mark.parametrize(
+    "case", EXAMPLES["numbered"], ids=lambda c: f"{c['timecode']}@{c['start']}={c['start_number']}"
+)
+def test_frame_numbers_from_a_chosen_start_both_ways(case):
+    rate = (case["fps"], case["drop_frame"])
+    assert tc.frame_number(case["timecode"], *rate, case["start"], case["start_number"]) == case["number"]
+    assert tc.from_frame_number(case["number"], *rate, case["start"], case["start_number"]) == case["timecode"]
+
+
+@pytest.mark.parametrize("case", EXAMPLES["numbered_refused"], ids=lambda c: c["timecode"])
+def test_frame_numbers_below_zero_are_refused(case):
+    with pytest.raises(ValueError):
+        tc.frame_number(case["timecode"], case["fps"], case["drop_frame"], case["start"], case["start_number"])
+
+
 def test_every_frame_round_trips_at_drop_frame_rates():
     for fps in (29.97, 59.94):
         for frames in range(0, 2 * 3600 * 60, 37):

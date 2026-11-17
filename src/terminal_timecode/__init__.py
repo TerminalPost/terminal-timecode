@@ -22,8 +22,17 @@ from importlib import resources
 
 import opentimelineio.opentime as otio_time
 
-__version__ = "0.1.1"
-__all__ = ["exact_rate", "examples", "problem", "skipped_per_minute", "to_frames", "to_timecode"]
+__version__ = "0.2.0"
+__all__ = [
+    "exact_rate",
+    "examples",
+    "frame_number",
+    "from_frame_number",
+    "problem",
+    "skipped_per_minute",
+    "to_frames",
+    "to_timecode",
+]
 
 SHAPE = re.compile(r"^(\d\d):(\d\d):(\d\d)([:;])(\d\d)$")
 
@@ -81,6 +90,29 @@ def to_timecode(frames: int, fps: float, drop_frame: bool = False) -> str:
         raise ValueError("frame numbers start at 0")
     rate = exact_rate(fps)
     return otio_time.to_timecode(otio_time.RationalTime(frames, rate), rate, drop_frame)
+
+
+def frame_number(
+    value: str, fps: float, drop_frame: bool = False, start: str = "00:00:00:00", start_number: int = 0
+) -> int:
+    """A timecode's frame number, counting `start` as frame `start_number` (VFX: a reel's first frame as 1001). The
+    default counts from 00:00:00:00, as Resolve and scanners' DPX numbering do. Refuses a number below 0."""
+    number = to_frames(value, fps, drop_frame) - to_frames(start, fps, drop_frame) + start_number
+    if number < 0:
+        raise ValueError(f"{value} comes before frame 0 when {start} is frame {start_number}")
+    return number
+
+
+def from_frame_number(
+    number: int, fps: float, drop_frame: bool = False, start: str = "00:00:00:00", start_number: int = 0
+) -> str:
+    """The timecode of a frame number, counting `start` as frame `start_number` (the reverse of frame_number)."""
+    if number < 0:
+        raise ValueError("frame numbers start at 0")
+    frames = to_frames(start, fps, drop_frame) + number - start_number
+    if frames < 0:
+        raise ValueError(f"frame {number} comes before 00:00:00:00 when {start} is frame {start_number}")
+    return to_timecode(frames, fps, drop_frame)
 
 
 def examples() -> dict:
