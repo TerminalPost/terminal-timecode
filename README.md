@@ -11,9 +11,9 @@ Timecode and frame numbers, both ways, strictly. A small layer over [OpenTimelin
 ```python
 import terminal_timecode as tc
 
-tc.to_frames("01:00:00:00", 23.976)                  # 86400 (23.976 counts as 24)
-tc.to_timecode(17982, 29.97, drop_frame=True)        # '00:10:00;00'
-tc.problem("00:01:00;00", 29.97, drop_frame=True)    # 'drop-frame skips this number'
+tc.to_frames("01:00:00:00", 23.976)  # 86400 (23.976 counts as 24)
+tc.to_timecode(17982, 29.97, drop_frame=True)  # '00:10:00;00'
+tc.problem("00:01:00;00", 29.97, drop_frame=True)  # 'drop-frame skips this number'
 ```
 
 Frame numbers count from 00:00:00:00. Rates: whole numbers, and the 1000/1001 ones (23.976, 29.97, 47.952, 59.94).
