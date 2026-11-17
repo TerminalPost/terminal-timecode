@@ -29,7 +29,7 @@ implementation in Terminal's tools: this package, Argento's screens (TypeScript)
 ## Install and test
 
 ```
-pip install "terminal-timecode @ https://github.com/TerminalPost/terminal-timecode/archive/refs/tags/v0.1.0.tar.gz"
+pip install "terminal-timecode @ https://github.com/TerminalPost/terminal-timecode/archive/refs/tags/v0.1.1.tar.gz"
 pip install -e ".[test]" && pytest
 ```
 

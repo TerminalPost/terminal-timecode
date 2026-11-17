@@ -278,6 +278,20 @@
    "drop_frame": false,
    "timecode": "00:01:00:00",
    "note": "non-drop 29.97 keeps every number"
+  },
+  {
+   "digits": "25000000",
+   "fps": 24,
+   "drop_frame": false,
+   "timecode": "23:00:00:00",
+   "note": "hours stop at 23"
+  },
+  {
+   "digits": "99999999",
+   "fps": 24,
+   "drop_frame": false,
+   "timecode": "23:59:59:23",
+   "note": "every field clamped"
   }
  ],
  "refused": [

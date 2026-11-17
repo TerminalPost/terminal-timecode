@@ -22,7 +22,7 @@ from importlib import resources
 
 import opentimelineio.opentime as otio_time
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 __all__ = ["exact_rate", "examples", "problem", "skipped_per_minute", "to_frames", "to_timecode"]
 
 SHAPE = re.compile(r"^(\d\d):(\d\d):(\d\d)([:;])(\d\d)$")
