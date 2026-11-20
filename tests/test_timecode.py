@@ -1,4 +1,4 @@
-"""Every case in examples.json must hold. The "typed" cases are for typing fields, which this package doesn't have."""
+"""Every case in examples.json must hold."""
 
 import doctest
 
@@ -25,6 +25,34 @@ def test_impossible_timecodes_are_refused(case):
     assert tc.problem(case["timecode"], case["fps"], case["drop_frame"])
     with pytest.raises(ValueError):
         tc.to_frames(case["timecode"], case["fps"], case["drop_frame"])
+
+
+@pytest.mark.parametrize("case", EXAMPLES["typed"], ids=lambda c: f"{c['digits']}@{c['fps']}")
+def test_typed_digits_become_a_timecode_that_exists(case):
+    result = tc.typed(case["digits"], case["fps"], case["drop_frame"])
+    assert result == case["timecode"]
+    assert tc.problem(result, case["fps"], case["drop_frame"]) is None
+
+
+@pytest.mark.parametrize("case", EXAMPLES["pasted"], ids=lambda c: f"{c['text']!r}@{c['fps']}")
+def test_pasted_text_becomes_a_timecode_that_exists(case):
+    result = tc.typed(case["text"], case["fps"], case["drop_frame"])
+    assert result == case["timecode"]
+    assert tc.problem(result, case["fps"], case["drop_frame"]) is None
+
+
+def test_typed_text_without_a_digit_is_refused():
+    for text in ("", "   ", "::", "abc", None):
+        with pytest.raises(ValueError):
+            tc.typed(text, 24)
+    with pytest.raises(ValueError):
+        tc.typed("01000000", 24, drop_frame=True)
+
+
+def test_any_eight_digits_give_a_timecode_that_exists():
+    for fps, drop in ((24, False), (23.976, False), (25, False), (29.97, True), (29.97, False), (59.94, True)):
+        for n in range(0, 100_000_000, 104_729):
+            assert tc.problem(tc.typed(f"{n:08d}", fps, drop), fps, drop) is None
 
 
 @pytest.mark.parametrize(

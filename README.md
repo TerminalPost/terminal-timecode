@@ -15,6 +15,7 @@ tc.to_frames("01:00:00:00", 23.976)  # 86400 (23.976 counts as 24)
 tc.to_timecode(17982, 29.97, drop_frame=True)  # '00:10:00;00'
 tc.problem("00:01:00;00", 29.97, drop_frame=True)  # 'drop-frame skips this number'
 tc.frame_number("01:00:01:00", 24, start="01:00:00:00", start_number=1001)  # 1025 (VFX numbering)
+tc.typed("1:2:3:99", 24)  # '01:02:03:23' (typed or pasted text, clamped to a timecode that exists)
 ```
 
 Frame numbers count from 00:00:00:00. Rates: whole numbers, and the 1000/1001 ones (23.976, 29.97, 47.952, 59.94).
@@ -30,7 +31,7 @@ implementation in Terminal's tools: this package, Argento's screens (TypeScript)
 ## Install and test
 
 ```
-pip install "terminal-timecode @ https://github.com/TerminalPost/terminal-timecode/archive/refs/tags/v0.2.0.tar.gz"
+pip install "terminal-timecode @ https://github.com/TerminalPost/terminal-timecode/archive/refs/tags/v0.3.0.tar.gz"
 pip install -e ".[test]" && pytest
 ```
 

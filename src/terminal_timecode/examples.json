@@ -3,6 +3,7 @@
   "Timecode examples every implementation must pass (frames both ways, typed digits, refused timecodes). The master copy is this file, in the terminal-timecode package; Argento (core/display/timecode_examples.json, for its screens) and TerminalPlayer (tests/timecode_examples.json, for its mpv script) keep copies, and their tests fail if a copy differs.",
   "frames: a frame count from 00:00:00:00 and its timecode, both ways. fps is the real rate (23.976 counts as 24, 29.97 as 30). Drop-frame applies to 29.97 and 59.94 only; ';' before the frames. Values cross-checked against an independent implementation and known points (29.97 drop-frame: 17982 = 00:10:00;00, 107892 = 01:00:00;00).",
   "typed: eight typed digits and the timecode that exists at that rate (clamped; for drop-frame, a skipped number moves up to the first one that exists).",
+  "pasted: text as people type or paste it, and the timecode it becomes: four fields with any separators (short fields get a leading zero), or digits alone (the first eight, filled from the left); then clamped as \"typed\" is. Text without a digit is refused.",
   "refused: timecodes that don't exist at that rate, which a conversion must refuse rather than turn into a frame number: a number drop-frame skips, frames, seconds or minutes too high, 24 hours or more, a separator that doesn't match the drop-frame setting (';' means drop-frame), anything but two digits per field. Lenient forms people type or paste (1:0:0:0, 01000000) are the typing field's job, before conversion.",
   "numbered: frame numbers counted from a chosen start (\"start\" is frame \"start_number\"): VFX's 1001 at a reel's first frame, or 0 at 00:00:00:00, the default. Both ways; a timecode before the start gets a smaller number, never below 0. Lengths (durations) are positions counted from 00:00:00:00, so they convert as \"frames\" does."
  ],
@@ -293,6 +294,76 @@
    "drop_frame": false,
    "timecode": "23:59:59:23",
    "note": "every field clamped"
+  }
+ ],
+ "pasted": [
+  {
+   "text": "01:00:00:00",
+   "fps": 24,
+   "drop_frame": false,
+   "timecode": "01:00:00:00"
+  },
+  {
+   "text": "1:0:0:0",
+   "fps": 24,
+   "drop_frame": false,
+   "timecode": "01:00:00:00",
+   "note": "short fields get a leading zero"
+  },
+  {
+   "text": "01;00;00;00",
+   "fps": 24,
+   "drop_frame": false,
+   "timecode": "01:00:00:00",
+   "note": "the separator follows the drop-frame setting, not the text"
+  },
+  {
+   "text": "01:00:00:00",
+   "fps": 29.97,
+   "drop_frame": true,
+   "timecode": "01:00:00;00"
+  },
+  {
+   "text": "01000000",
+   "fps": 24,
+   "drop_frame": false,
+   "timecode": "01:00:00:00",
+   "note": "digits alone"
+  },
+  {
+   "text": "0100",
+   "fps": 24,
+   "drop_frame": false,
+   "timecode": "01:00:00:00",
+   "note": "fewer than eight digits fill from the left, zeros after"
+  },
+  {
+   "text": "010203045",
+   "fps": 24,
+   "drop_frame": false,
+   "timecode": "01:02:03:04",
+   "note": "only the first eight digits count"
+  },
+  {
+   "text": " 01:02:03:04\n",
+   "fps": 24,
+   "drop_frame": false,
+   "timecode": "01:02:03:04",
+   "note": "space around it is ignored"
+  },
+  {
+   "text": "1:2:3:99",
+   "fps": 24,
+   "drop_frame": false,
+   "timecode": "01:02:03:23",
+   "note": "clamped, as typed digits are"
+  },
+  {
+   "text": "00:01:00:00",
+   "fps": 29.97,
+   "drop_frame": true,
+   "timecode": "00:01:00;02",
+   "note": "a number drop-frame skips moves up to the first that exists"
   }
  ],
  "refused": [

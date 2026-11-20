@@ -5,7 +5,7 @@ Built on OpenTimelineIO's `opentime` (ASWF, Apache-2.0), adding what it leaves t
   drop-frame skips, into the wrong frame (1798);
 - drop-frame is always stated, never guessed: OpenTimelineIO assumes drop-frame at 29.97 unless told otherwise.
 
-Every function here passes every case in `examples.json` (frames both ways, refused timecodes). Other implementations
+Every function here passes every case in `examples.json` (frames both ways, typed text, refused timecodes). Other implementations
 (Argento's screens in TypeScript, TerminalPlayer's mpv script in Lua) keep a copy of that file and must pass it too.
 
     >>> to_frames("01:00:00:00", 24)
@@ -14,6 +14,8 @@ Every function here passes every case in `examples.json` (frames both ways, refu
     '00:10:00;00'
     >>> problem("00:01:00;00", 29.97, drop_frame=True)
     'drop-frame skips this number'
+    >>> typed("1:2:3:99", 24)
+    '01:02:03:23'
 """
 
 import json
@@ -22,7 +24,7 @@ from importlib import resources
 
 import opentimelineio.opentime as otio_time
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 __all__ = [
     "exact_rate",
     "examples",
@@ -32,9 +34,11 @@ __all__ = [
     "skipped_per_minute",
     "to_frames",
     "to_timecode",
+    "typed",
 ]
 
 SHAPE = re.compile(r"^(\d\d):(\d\d):(\d\d)([:;])(\d\d)$")
+FIELDS = re.compile(r"^\D*(\d{1,3})\D+(\d{1,2})\D+(\d{1,2})\D+(\d{1,3})\D*$")
 
 
 def exact_rate(fps: float) -> float:
@@ -55,7 +59,7 @@ def skipped_per_minute(fps: float, drop_frame: bool) -> int:
 
 def problem(value: str, fps: float, drop_frame: bool = False) -> str | None:
     """Why a timecode can't exist at this rate, or None if it can. Strict: two digits per field, ';' exactly when
-    drop-frame, no number drop-frame skips, below 24 hours. Lenient typing (1:0:0:0, 01000000) is the caller's job."""
+    drop-frame, no number drop-frame skips, below 24 hours. For lenient typing (1:0:0:0, 01000000), see typed()."""
     match = SHAPE.match(value or "")
     if not match:
         return "not HH:MM:SS:FF"
@@ -92,6 +96,29 @@ def to_timecode(frames: int, fps: float, drop_frame: bool = False) -> str:
     return otio_time.to_timecode(otio_time.RationalTime(frames, rate), rate, drop_frame)
 
 
+def typed(text: str, fps: float, drop_frame: bool = False) -> str:
+    """What someone typed or pasted, as the nearest timecode that exists at this rate. Four fields with any
+    separators (1:0:0:0, 01;00;00;00), or digits alone, filled from the left (0100 is 01:00:00:00; only the first
+    eight count). Then clamped: hours to 23, minutes and seconds to 59, frames below the rate, and a number
+    drop-frame skips moves up to the first that exists. The separator follows `drop_frame`, not the text. Refuses
+    text without a digit (ValueError)."""
+    skipped = skipped_per_minute(fps, drop_frame)
+    if drop_frame and not skipped:
+        raise ValueError(f"{fps} fps has no drop-frame timecode")
+    fields = FIELDS.match(text or "")
+    if fields:
+        digits = "".join(part.zfill(2)[-2:] for part in fields.groups())
+    else:
+        digits = re.sub(r"\D", "", text or "")[:8].ljust(8, "0")
+        if not re.search(r"\d", text or ""):
+            raise ValueError(f"{text!r} has no digits")
+    h, m, s, f = (int(digits[i : i + 2]) for i in (0, 2, 4, 6))
+    h, m, s, f = min(h, 23), min(m, 59), min(s, 59), min(f, round(exact_rate(fps)) - 1)
+    if skipped and s == 0 and m % 10 and f < skipped:
+        f = skipped
+    return f"{h:02d}:{m:02d}:{s:02d}{';' if drop_frame else ':'}{f:02d}"
+
+
 def frame_number(
     value: str, fps: float, drop_frame: bool = False, start: str = "00:00:00:00", start_number: int = 0
 ) -> int:
@@ -116,5 +143,5 @@ def from_frame_number(
 
 
 def examples() -> dict:
-    """The shared examples (`examples.json`): "frames", "typed" and "refused" cases, with an "about" text."""
+    """The shared examples (`examples.json`): "frames", "typed", "pasted" and "refused" cases, with an "about" text."""
     return json.loads(resources.files(__package__).joinpath("examples.json").read_text(encoding="utf-8"))
