@@ -1,6 +1,6 @@
 {
  "about": [
-  "Timecode examples every implementation must pass (frames both ways, typed digits, refused timecodes). The master copy is this file, in the terminal-timecode package; Argento (core/display/timecode_examples.json, for its screens) and TerminalPlayer (tests/timecode_examples.json, for its mpv script) keep copies, and their tests fail if a copy differs.",
+  "Timecode examples every implementation must pass (frames both ways, typed and pasted text, refused timecodes). The master copy is this file, in the terminal-timecode package; implementations in other languages keep copies, and their tests fail if a copy differs.",
   "frames: a frame count from 00:00:00:00 and its timecode, both ways. fps is the real rate (23.976 counts as 24, 29.97 as 30). Drop-frame applies to 29.97 and 59.94 only; ';' before the frames. Values cross-checked against an independent implementation and known points (29.97 drop-frame: 17982 = 00:10:00;00, 107892 = 01:00:00;00).",
   "typed: eight typed digits and the timecode that exists at that rate (clamped; for drop-frame, a skipped number moves up to the first one that exists).",
   "pasted: text as people type or paste it, and the timecode it becomes: four fields with any separators (short fields get a leading zero), or digits alone (the first eight, filled from the left); then clamped as \"typed\" is. Text without a digit is refused.",

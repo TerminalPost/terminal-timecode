@@ -1,12 +1,12 @@
-"""Timecode and frame numbers, both ways, strictly: one codebase for Terminal's tools (Argento, TerminalPlayer).
+"""Timecode and frame numbers, both ways, strictly: one codebase for Terminal's tools.
 
 Built on OpenTimelineIO's `opentime` (ASWF, Apache-2.0), adding what it leaves to its callers:
 - timecodes that can't exist are refused: OpenTimelineIO quietly turns 00:01:00;00 at 29.97 drop-frame, a number
   drop-frame skips, into the wrong frame (1798);
 - drop-frame is always stated, never guessed: OpenTimelineIO assumes drop-frame at 29.97 unless told otherwise.
 
-Every function here passes every case in `examples.json` (frames both ways, typed text, refused timecodes). Other implementations
-(Argento's screens in TypeScript, TerminalPlayer's mpv script in Lua) keep a copy of that file and must pass it too.
+Every function here passes every case in `examples.json` (frames both ways, typed text, refused timecodes). Implementations in
+other languages keep a copy of that file and must pass it too.
 
     >>> to_frames("01:00:00:00", 24)
     86400

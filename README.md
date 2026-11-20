@@ -24,9 +24,9 @@ Drop-frame exists at 29.97 and 59.94 only.
 ## The shared examples
 
 `src/terminal_timecode/examples.json` (also `terminal_timecode.examples()`) lists worked cases: frames ↔ timecode both
-ways, typed digits and what they become, and timecodes that must be refused. It's the contract for every timecode
-implementation in Terminal's tools: this package, Argento's screens (TypeScript) and TerminalPlayer's mpv script
-(Lua) each run it, and their copies are checked against this one.
+ways, typed and pasted text and what it becomes, and timecodes that must be refused. It's the contract for every timecode
+implementation in Terminal's tools: this package and the ones in other languages each run it, and their copies are
+checked against this one.
 
 ## Install and test
 
